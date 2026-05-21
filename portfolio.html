@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- ════════════════════════════════════════
+       CUSTOMIZE: Change the title to your name
+       ════════════════════════════════════════ -->
+  <title>Portfolio — Tanmay W.</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ════════════════════════════════════════════════════════════
+       CUSTOMIZE: Edit these variables to personalize your palette
+       ════════════════════════════════════════════════════════════ */
+    :root {
+      --bg:           #F5F2ED;
+      --ink:          #1C1917;
+      --ink-mid:      #5A554F;
+      --ink-light:    #9A948D;
+      --accent:       #BFA07A;
+      --accent-dark:  #8C6F4E;
+      --card-bg:      #EDE9E2;
+      --border:       #DDD8CF;
+      --border-light: #E8E4DC;
+
+      --font-display: 'Cormorant Garamond', Georgia, serif;
+      --font-body:    'Jost', 'Helvetica Neue', Arial, sans-serif;
+
+      --ease: cubic-bezier(0.25, 0, 0.1, 1);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; font-size: 16px; }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--font-body);
+      font-weight: 300;
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+
+    /* ── Utility ─────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ── Navigation ──────────────────────── */
+    nav {
+      position: fixed;
+      inset: 0 0 auto 0;
+      z-index: 50;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.6rem 4rem;
+      transition: background 0.4s, border-color 0.4s;
+      border-bottom: 1px solid transparent;
+    }
+    nav.scrolled {
+      background: rgba(245, 242, 237, 0.88);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom-color: var(--border-light);
+    }
+    .nav-brand {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 400;
+      letter-spacing: 0.02em;
+      color: var(--ink);
+      text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 2.8rem; list-style: none; }
+    .nav-links a {
+      font-size: 0.7rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--ink-light);
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--ink); }
+
+    /* ── Hero ────────────────────────────── */
+    #hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: end;
+      padding: 0 4rem 5rem;
+      position: relative;
+    }
+    .hero-left { padding-top: 14rem; }
+
+    .hero-eyebrow {
+      font-size: 0.68rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent-dark);
+      margin-bottom: 1.4rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.15s var(--ease) forwards;
+    }
+    .hero-name {
+      font-family: var(--font-display);
+      font-size: clamp(4.5rem, 9.5vw, 9rem);
+      font-weight: 300;
+      line-height: 0.93;
+      letter-spacing: -0.02em;
+      margin-bottom: 2.2rem;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.3s var(--ease) forwards;
+    }
+    .hero-name em {
+      font-style: italic;
+      color: var(--accent-dark);
+    }
+    .hero-tagline {
+      font-size: 1rem;
+      font-weight: 300;
+      color: var(--ink-mid);
+      max-width: 360px;
+      line-height: 1.8;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.5s var(--ease) forwards;
+    }
+    .hero-right {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: flex-end;
+      gap: 1.2rem;
+      padding-bottom: 0.5rem;
+    }
+    .hero-year {
+      font-family: var(--font-display);
+      font-size: 0.85rem;
+      font-weight: 400;
+      color: var(--ink-light);
+      opacity: 0;
+      animation: fadeUp 0.9s 0.7s var(--ease) forwards;
+    }
+    .hero-scroll-hint {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      font-size: 0.68rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink-light);
+      opacity: 0;
+      animation: fadeUp 0.9s 0.9s var(--ease) forwards;
+    }
+    .scroll-bar {
+      width: 44px;
+      height: 1px;
+      background: var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+    .scroll-bar::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--accent-dark);
+      transform: translateX(-100%);
+      animation: slideBar 2.2s 1.6s ease infinite;
+    }
+    .hero-rule {
+      position: absolute;
+      bottom: 0;
+      left: 4rem;
+      right: 4rem;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ── Section shared ──────────────────── */
+    .section-wrap {
+      padding: 7rem 4rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .section-label {
+      font-size: 0.66rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent-dark);
+      margin-bottom: 3.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border-light);
+    }
+
+    /* ── About ───────────────────────────── */
+    #about .inner {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 5rem;
+      align-items: start;
+    }
+    .about-sidebar{}
+    .about-index {
+      font-family: var(--font-display);
+      font-size: 7rem;
+      font-weight: 300;
+      line-height: 1;
+      color: var(--border);
+      margin-bottom: 2rem;
+      display: block;
+  }
+    .disciplines {
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+    }
+    .discipline {
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-light);
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+    }
+    .discipline::before {
+      content: '';
+      width: 18px;
+      height: 1px;
+      background: var(--accent);
+      display: inline-block;
+    }
+    .about-heading {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 3.8vw, 3rem);
+      font-weight: 300;
+      line-height: 1.22;
+      margin-bottom: 1.8rem;
+      letter-spacing: -0.01em;
+    }
+    .about-heading em { font-style: italic; color: var(--accent-dark); }
+    .about-body {
+      font-size: 0.97rem;
+      color: var(--ink-mid);
+      line-height: 1.9;
+      max-width: 580px;
+    }
+    .about-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-top: 2.5rem;
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink);
+      text-decoration: none;
+      border-bottom: 1px solid var(--accent);
+      padding-bottom: 0.25rem;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .about-cta:hover { color: var(--accent-dark); border-color: var(--accent-dark); }
+    .about-cta svg { transition: transform 0.2s; }
+    .about-cta:hover svg { transform: translateX(4px); }
+
+    /* ── Work ────────────────────────────── */
+    #work {}
+    .work-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5px;
+      margin: 0 -4rem;
+      background: var(--border-light);
+    }
+    .project-card {
+      background: var(--bg);
+      padding: 2.4rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      cursor: pointer;
+      transition: background 0.25s;
+      text-decoration: none;
+      color: inherit;
+    }
+    .project-card:hover { background: var(--card-bg); }
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+    .card-num {
+      font-family: var(--font-display);
+      font-size: 0.85rem;
+      font-weight: 400;
+      color: var(--ink-light);
+    }
+    .card-arrow {
+      width: 28px;
+      height: 28px;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--ink-light);
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+      flex-shrink: 0;
+    }
+    .project-card:hover .card-arrow {
+      background: var(--ink);
+      color: var(--bg);
+      border-color: var(--ink);
+    }
+    .card-name {
+      font-family: var(--font-display);
+      font-size: 1.55rem;
+      font-weight: 400;
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+    }
+    .card-desc {
+      font-size: 0.88rem;
+      color: var(--ink-mid);
+      line-height: 1.7;
+      flex: 1;
+    }
+    .card-meta {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .card-lang {
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-light);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .lang-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+      display: inline-block;
+    }
+    .card-stars {
+      font-size: 0.72rem;
+      color: var(--ink-light);
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    .work-loading, .work-error {
+      padding: 4rem;
+      text-align: center;
+      font-size: 0.9rem;
+      color: var(--ink-light);
+      background: var(--bg);
+    }
+    .work-empty {
+      padding: 5rem 4rem;
+      font-size: 0.9rem;
+      color: var(--ink-light);
+      background: var(--bg);
+    }
+
+    /* ── Contact ─────────────────────────── */
+    #contact .inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+    .contact-heading {
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 6vw, 5.5rem);
+      font-weight: 300;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+    }
+    .contact-heading em { font-style: italic; color: var(--accent-dark); }
+    .contact-right {
+      display: flex;
+      flex-direction: column;
+      gap: 1.8rem;
+    }
+    .contact-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-light);
+      padding-bottom: 1.2rem;
+    }
+    .contact-link-label {
+      font-size: 0.68rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-light);
+    }
+    .contact-link {
+      font-size: 0.92rem;
+      color: var(--ink);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      padding-bottom: 1px;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .contact-link:hover {
+      border-color: var(--accent);
+      color: var(--accent-dark);
+    }
+
+    /* ── Footer ──────────────────────────── */
+    footer {
+      padding: 2.5rem 4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer-copy {
+      font-size: 0.72rem;
+      color: var(--ink-light);
+      letter-spacing: 0.04em;
+    }
+    .footer-brand {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 400;
+      color: var(--ink-light);
+      text-decoration: none;
+    }
+    .footer-brand:hover { color: var(--ink); }
+
+    /* ── Animations ──────────────────────── */
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes slideBar {
+      0%   { transform: translateX(-100%); }
+      50%  { transform: translateX(0); }
+      100% { transform: translateX(100%); }
+    }
+
+    /* ── Responsive ──────────────────────── */
+    @media (max-width: 900px) {
+      nav { padding: 1.4rem 2rem; }
+      .nav-links { gap: 1.8rem; }
+
+      #hero { grid-template-columns: 1fr; padding: 0 2rem 4rem; }
+      .hero-left { padding-top: 10rem; }
+      .hero-right { display: none; }
+      .hero-rule { left: 2rem; right: 2rem; }
+
+      .section-wrap { padding: 5rem 2rem; }
+      #about .inner { grid-template-columns: 1fr; gap: 2.5rem; }
+      .about-index { display: none; }
+      #contact .inner { grid-template-columns: 1fr; }
+      .work-grid { margin: 0 -2rem; }
+      footer { padding: 2rem; flex-direction: column; gap: 1rem; text-align: center; }
+    }
+
+    @media (max-width: 540px) {
+      .hero-name { font-size: 3.8rem; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ════════════════════
+       NAVIGATION
+       ════════════════════ -->
+  <nav id="nav">
+
+    <!-- CUSTOMIZE: Replace with your name -->
+    <a href="#hero" class="nav-brand">Your Name</a>
+
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#work">Work</a></li>
+      <li><a href="#contact">Contact</a></li>
+
+      <!-- CUSTOMIZE: Replace with your GitHub URL -->
+      <li><a href="https://github.com/yourusername" target="_blank" rel="noopener">GitHub ↗</a></li>
+    </ul>
+  </nav>
+
+
+  <!-- ════════════════════
+       HERO
+       ════════════════════ -->
+  <section id="hero">
+    <div class="hero-left">
+
+      <!-- CUSTOMIZE: Replace with your role or tagline label -->
+      <p class="hero-eyebrow">Creative &amp; Design Portfolio</p>
+
+      <!-- CUSTOMIZE: Replace with your name — wrap one word in <em> for italic accent -->
+      <h1 class="hero-name">
+        Your<br />
+        <em>Name</em><br />
+        Here
+      </h1>
+
+      <!-- CUSTOMIZE: Replace with your tagline -->
+      <p class="hero-tagline">
+        Crafting intentional design experiences that live at the intersection of clarity and beauty.
+      </p>
+
+    </div>
+    <div class="hero-right">
+
+      <!-- CUSTOMIZE: Replace with current year or remove -->
+      <span class="hero-year">Est. 2024</span>
+
+      <div class="hero-scroll-hint">
+        <span class="scroll-bar"></span>
+        Scroll
+      </div>
+    </div>
+    <div class="hero-rule"></div>
+  </section>
+
+
+  <!-- ════════════════════
+       ABOUT
+       ════════════════════ -->
+  <section id="about" class="section-wrap">
+    <p class="section-label">About</p>
+    <div class="inner">
+      <div class="about-sidebar">
+        <span class="about-index">01</span>
+        <div class="disciplines">
+
+          <!-- CUSTOMIZE: Replace with your own disciplines / skills -->
+          <span class="discipline">UI &amp; UX Design</span>
+          <span class="discipline">Brand Identity</span>
+          <span class="discipline">Motion Design</span>
+          <span class="discipline">Typography</span>
+          <span class="discipline">Visual Storytelling</span>
+
+        </div>
+      </div>
+      <div class="about-content reveal">
+
+        <!-- CUSTOMIZE: Replace with your own heading and bio -->
+        <h2 class="about-heading">
+          Designing work that<br />
+          <em>means something</em>
+        </h2>
+        <p class="about-body">
+          I'm a designer who believes good work is quiet, purposeful, and lasting.
+          My practice spans brand systems, digital interfaces, and visual communication —
+          always rooted in careful research and an obsession with craft.
+          <br /><br />
+          When I'm not designing, I'm usually reading, sketching, or hunting for the best coffee in the city.
+        </p>
+
+        <!-- CUSTOMIZE: Replace href with your GitHub or resume URL -->
+        <a class="about-cta" href="https://github.com/yourusername" target="_blank" rel="noopener">
+          View GitHub
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M2 7h10M7 2l5 5-5 5" />
+          </svg>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════════════════════
+       WORK — GitHub Repos
+       ════════════════════ -->
+  <section id="work" class="section-wrap">
+    <p class="section-label">Selected Work</p>
+    <div class="work-grid" id="work-grid">
+      <div class="work-loading">Loading projects from GitHub…</div>
+    </div>
+  </section>
+
+
+  <!-- ════════════════════
+       CONTACT
+       ════════════════════ -->
+  <section id="contact" class="section-wrap" style="border-bottom: none;">
+    <p class="section-label">Contact</p>
+    <div class="inner">
+      <div class="reveal">
+        <h2 class="contact-heading">
+          Let's make<br />
+          something<br />
+          <em>great.</em>
+        </h2>
+      </div>
+      <div class="contact-right reveal">
+
+        <!-- CUSTOMIZE: Replace with your email -->
+        <div class="contact-line">
+          <span class="contact-link-label">Email</span>
+          <a class="contact-link" href="mailto:hello@yourname.com">hello@yourname.com</a>
+        </div>
+
+        <!-- CUSTOMIZE: Replace with your GitHub URL and username -->
+        <div class="contact-line">
+          <span class="contact-link-label">GitHub</span>
+          <a class="contact-link" href="https://github.com/yourusername" target="_blank" rel="noopener">@yourusername</a>
+        </div>
+
+        <!-- CUSTOMIZE: Add/remove rows as needed. Examples below are commented out:
+
+        <div class="contact-line">
+          <span class="contact-link-label">LinkedIn</span>
+          <a class="contact-link" href="https://linkedin.com/in/yourhandle" target="_blank">linkedin.com/in/yourhandle</a>
+        </div>
+
+        <div class="contact-line">
+          <span class="contact-link-label">Twitter / X</span>
+          <a class="contact-link" href="https://x.com/yourhandle" target="_blank">@yourhandle</a>
+        </div>
+
+        <div class="contact-line">
+          <span class="contact-link-label">Dribbble</span>
+          <a class="contact-link" href="https://dribbble.com/yourhandle" target="_blank">dribbble.com/yourhandle</a>
+        </div>
+
+        -->
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════════════════════
+       FOOTER
+       ════════════════════ -->
+  <footer>
+    <span class="footer-copy">&copy; <span id="year"></span> Your Name. All rights reserved.</span>
+
+    <!-- CUSTOMIZE: Replace href with your GitHub URL -->
+    <a class="footer-brand" href="https://github.com/yourusername" target="_blank" rel="noopener">GitHub ↗</a>
+  </footer>
+
+
+  <script>
+    /* ════════════════════════════════════════════════════════
+       CUSTOMIZE: Set your GitHub username here (one change!)
+       ════════════════════════════════════════════════════════ */
+    const GITHUB_USERNAME = 'yourusername';
+
+    /* CUSTOMIZE: How many repos to show (sorted by stars) */
+    const MAX_REPOS = 9;
+
+    /* CUSTOMIZE: Repos to exclude by name */
+    const EXCLUDE_REPOS = [];
+
+    /* ── Nav scroll behaviour ── */
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 40);
+    }, { passive: true });
+
+    /* ── Intersection Observer reveals ── */
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+    /* ── Footer year ── */
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    /* ── Language colour map ── */
+    const LANG_COLORS = {
+      JavaScript: '#F1E05A', TypeScript: '#3178C6', Python: '#3572A5',
+      HTML: '#E34C26', CSS: '#563D7C', SCSS: '#C6538C', Ruby: '#701516',
+      Go: '#00ADD8', Rust: '#DEA584', Java: '#B07219', Swift: '#F05138',
+      Kotlin: '#A97BFF', Vue: '#41B883', Shell: '#89E051',
+    };
+
+    /* ── Fetch & render GitHub repos ── */
+    async function loadRepos() {
+      const grid = document.getElementById('work-grid');
+      try {
+        const res = await fetch(
+          `https://api.github.com/users/${GITHUB_USERNAME}/repos?per_page=100&sort=pushed`,
+          { headers: { Accept: 'application/vnd.github.v3+json' } }
+        );
+        if (!res.ok) throw new Error(res.status);
+        const all = await res.json();
+
+        const repos = all
+          .filter(r => !r.fork && !r.private && !EXCLUDE_REPOS.includes(r.name))
+          .sort((a, b) => b.stargazers_count - a.stargazers_count)
+          .slice(0, MAX_REPOS);
+
+        if (!repos.length) {
+          grid.innerHTML = '<div class="work-empty">No public repositories found.</div>';
+          return;
+        }
+
+        grid.innerHTML = repos.map((r, i) => {
+          const dot = LANG_COLORS[r.language]
+            ? `<span class="lang-dot" style="background:${LANG_COLORS[r.language]}"></span>`
+            : `<span class="lang-dot"></span>`;
+
+          const desc = r.description
+            ? r.description.length > 100 ? r.description.slice(0, 97) + '…' : r.description
+            : 'No description.';
+
+          const num = String(i + 1).padStart(2, '0');
+          const stars = r.stargazers_count
+            ? `<span class="card-stars">★ ${r.stargazers_count}</span>` : '';
+
+          return `
+            <a class="project-card reveal" href="${r.html_url}" target="_blank" rel="noopener">
+              <div class="card-top">
+                <span class="card-num">${num}</span>
+                <span class="card-arrow">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M2 10L10 2M10 2H4M10 2v6"/>
+                  </svg>
+                </span>
+              </div>
+              <p class="card-name">${r.name}</p>
+              <p class="card-desc">${desc}</p>
+              <div class="card-meta">
+                ${r.language ? `<span class="card-lang">${dot}${r.language}</span>` : ''}
+                ${stars}
+              </div>
+            </a>`;
+        }).join('');
+
+        /* observe newly created cards */
+        grid.querySelectorAll('.reveal').forEach((el, i) => {
+          el.style.transitionDelay = `${i * 60}ms`;
+          io.observe(el);
+        });
+
+      } catch (err) {
+        console.error(err);
+        grid.innerHTML = `
+          <div class="work-error">
+            Couldn't load GitHub repos. Make sure <strong>GITHUB_USERNAME</strong> is set correctly in the script.<br />
+            <small style="margin-top:0.5rem;display:block;opacity:0.7;">Error: ${err.message}</small>
+          </div>`;
+      }
+    }
+
+    loadRepos();
+  </script>
+</body>
+</html>
