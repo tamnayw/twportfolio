@@ -6,7 +6,7 @@ A clean, editorial style personal portfolio website,  built with vanilla HTML, C
 
 ## Preview
 
-> Live at: [tamnayw.github.io](https://tamnayw.github.io)
+> Live at: [https://tamnayw.github.io](https://tamnayw.github.io/twportfolio/)
 
 ---
 
